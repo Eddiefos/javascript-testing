@@ -89,6 +89,17 @@
       border-radius: 4px;
     }
 
+    .card.disabled {
+      opacity: 0.45;
+      cursor: default;
+      pointer-events: none;
+    }
+
+    .card .tag.not-deployed {
+      background: #1e1e1e;
+      color: #555;
+    }
+
     .section-label {
       max-width: 900px;
       margin: 2rem auto 0.8rem;
@@ -136,81 +147,68 @@
   <p class="section-label">Odin Assignments</p>
   <div class="grid">
 
-    <a class="card" href="../odin-recipes/index.html">
+    <a class="card" href="https://eddiefos.github.io/odin-recipes/" target="_blank">
       <div class="icon">🍲</div>
       <h2>Odin Recipes</h2>
       <p>Foundations project — building a recipe site with basic HTML &amp; CSS.</p>
       <span class="tag">odin-recipes</span>
     </a>
 
-    <a class="card" href="../html-boilerplate/index.html">
-      <div class="icon">🧱</div>
-      <h2>HTML Boilerplate</h2>
-      <p>Foundations exercise — basic HTML document structure.</p>
-      <span class="tag">html-boilerplate</span>
+    <a class="card" href="https://eddiefos.github.io/PortfolioEdvardFosseie/" target="_blank">
+      <div class="icon">🗂️</div>
+      <h2>Portfolio</h2>
+      <p>Personal portfolio site.</p>
+      <span class="tag">PortfolioEdvardFosseie</span>
     </a>
 
-    <a class="card" href="../odin-links-and-images/index.html">
-      <div class="icon">🔗</div>
-      <h2>Links &amp; Images</h2>
-      <p>Foundations exercise — working with anchors, relative paths, and images.</p>
-      <span class="tag">odin-links-and-images</span>
-    </a>
-
-    <a class="card" href="../landing-page/index.html">
+    <a class="card" href="https://eddiefos.github.io/landing-page/" target="_blank">
       <div class="icon">🖥️</div>
       <h2>Landing Page</h2>
       <p>Foundations project — flexbox-based landing page layout.</p>
       <span class="tag">landing-page</span>
     </a>
 
-    <a class="card" href="../css-exercises/foundations/">
-      <div class="icon">🎨</div>
-      <h2>CSS Exercises</h2>
-      <p>Foundations &amp; intermediate CSS practice exercises.</p>
-      <span class="tag">css-exercises</span>
-    </a>
-
-    <a class="card" href="../Etch-a-sketch/index.html">
-      <div class="icon">✏️</div>
-      <h2>Etch-a-Sketch</h2>
-      <p>JavaScript project — dynamic grid drawing with DOM manipulation.</p>
-      <span class="tag">Etch-a-sketch</span>
-    </a>
-
-    <a class="card" href="../rock-paper-scissors/index.html">
-      <div class="icon">✊</div>
-      <h2>Rock Paper Scissors</h2>
-      <p>JavaScript project — game logic and UI.</p>
-      <span class="tag">rock-paper-scissors</span>
-    </a>
-
-    <a class="card" href="../calculator/index.html">
+    <a class="card" href="https://eddiefos.github.io/Calculator/" target="_blank">
       <div class="icon">🔢</div>
       <h2>Calculator</h2>
       <p>JavaScript project — fully functional calculator with DOM events.</p>
-      <span class="tag">calculator</span>
+      <span class="tag">Calculator</span>
     </a>
 
-  </div>
-
-  <!-- ── Other Projects ── -->
-  <p class="section-label">Other Projects</p>
-  <div class="grid">
-
-    <a class="card" href="../AICalculator/index.html">
-      <div class="icon">🤖</div>
-      <h2>AI Calculator</h2>
-      <p>Calculator variant with AI features.</p>
-      <span class="tag">AICalculator</span>
+    <a class="card" href="https://eddiefos.github.io/etch-a-sketch/" target="_blank">
+      <div class="icon">✏️</div>
+      <h2>Etch-a-Sketch</h2>
+      <p>JavaScript project — dynamic grid drawing with DOM manipulation.</p>
+      <span class="tag">etch-a-sketch</span>
     </a>
 
-    <a class="card" href="../CascadeProjects/taurus-career-guide/">
-      <div class="icon">🗂️</div>
-      <h2>Taurus Career Guide</h2>
-      <p>Career guide project from CascadeProjects.</p>
-      <span class="tag">CascadeProjects</span>
-    </a>
+    <div class="card disabled">
+      <div class="icon">🧱</div>
+      <h2>HTML Boilerplate</h2>
+      <p>Foundations exercise — basic HTML document structure.</p>
+      <span class="tag not-deployed">not deployed</span>
+    </div>
+
+    <div class="card disabled">
+      <div class="icon">🔗</div>
+      <h2>Links &amp; Images</h2>
+      <p>Foundations exercise — working with anchors, relative paths, and images.</p>
+      <span class="tag not-deployed">not deployed</span>
+    </div>
+
+    <div class="card disabled">
+      <div class="icon">🎨</div>
+      <h2>CSS Exercises</h2>
+      <p>Foundations &amp; intermediate CSS practice exercises.</p>
+      <span class="tag not-deployed">not deployed</span>
+    </div>
+
+    <div class="card disabled">
+      <div class="icon">✊</div>
+      <h2>Rock Paper Scissors</h2>
+      <p>JavaScript project — game logic and UI.</p>
+      <span class="tag not-deployed">not deployed</span>
+    </div>
 
   </div>
 
