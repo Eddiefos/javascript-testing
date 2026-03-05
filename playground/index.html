@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Playground</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #111;
+      color: #e0e0e0;
+      display: grid;
+      grid-template-rows: auto 1fr;
+      height: 100vh;
+    }
+
+    header {
+      background: #1a1a1a;
+      border-bottom: 1px solid #2a2a2a;
+      padding: 0.75rem 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    header h1 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    header a {
+      font-size: 0.8rem;
+      color: #666;
+      text-decoration: none;
+    }
+
+    header a:hover { color: #e85d0b; }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .pane {
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid #222;
+      border-bottom: 1px solid #222;
+      overflow: hidden;
+    }
+
+    .pane-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #555;
+      padding: 0.4rem 0.8rem;
+      background: #161616;
+      border-bottom: 1px solid #222;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .pane-label span { color: #e85d0b; }
+
+    textarea {
+      flex: 1;
+      background: #0f0f0f;
+      color: #d4d4d4;
+      border: none;
+      outline: none;
+      resize: none;
+      padding: 0.8rem;
+      font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+      font-size: 0.82rem;
+      line-height: 1.6;
+      tab-size: 2;
+    }
+
+    textarea::placeholder { color: #333; }
+
+    #output-pane {
+      grid-column: 2;
+      grid-row: 1 / 3;
+      border-right: none;
+      border-bottom: none;
+    }
+
+    #preview {
+      flex: 1;
+      background: #fff;
+      border: none;
+      width: 100%;
+    }
+
+    #console-output {
+      height: 160px;
+      overflow-y: auto;
+      background: #0a0a0a;
+      padding: 0.6rem 0.8rem;
+      font-family: monospace;
+      font-size: 0.78rem;
+      line-height: 1.5;
+      border-top: 1px solid #222;
+    }
+
+    .log  { color: #d4d4d4; }
+    .error { color: #f48771; }
+    .warn  { color: #cca700; }
+
+    .run-btn {
+      background: #e85d0b;
+      color: #fff;
+      border: none;
+      padding: 0.2rem 0.7rem;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .run-btn:hover { background: #d04e00; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>🛝 Playground</h1>
+    <a href="../index.html">← Hub</a>
+  </header>
+
+  <div class="workspace">
+
+    <!-- HTML editor -->
+    <div class="pane" id="html-pane">
+      <div class="pane-label"><span>HTML</span></div>
+      <textarea id="html-editor" spellcheck="false" placeholder="<!-- HTML here -->"><!-- Add your HTML here -->
+<div id="app">
+
+</div></textarea>
+    </div>
+
+    <!-- CSS editor -->
+    <div class="pane" id="css-pane">
+      <div class="pane-label"><span>CSS</span></div>
+      <textarea id="css-editor" spellcheck="false" placeholder="/* CSS here */">/* Add your styles here */
+body {
+  font-family: system-ui, sans-serif;
+  padding: 1rem;
+}</textarea>
+    </div>
+
+    <!-- Output: preview + console -->
+    <div class="pane" id="output-pane">
+      <div class="pane-label">
+        <span>OUTPUT</span>
+        <button class="run-btn" onclick="runCode()">▶ Run</button>
+      </div>
+      <iframe id="preview" sandbox="allow-scripts"></iframe>
+      <div id="console-output"></div>
+    </div>
+
+  </div>
+
+  <!-- Floating JS editor -->
+  <div style="position:fixed; bottom:0; left:0; width:50%; height:220px; background:#0f0f0f; border-top:1px solid #222; display:flex; flex-direction:column;">
+    <div class="pane-label" style="background:#161616;">
+      <span>JS</span>
+      <button class="run-btn" onclick="runCode()">▶ Run</button>
+    </div>
+    <textarea id="js-editor" spellcheck="false" placeholder="// JavaScript here" style="flex:1; background:#0f0f0f; color:#d4d4d4; border:none; outline:none; resize:none; padding:0.8rem; font-family:monospace; font-size:0.82rem; tab-size:2;">// Your JS here
+const app = document.getElementById('app');
+app.textContent = 'Hello, playground! 👋';
+</textarea>
+  </div>
+
+  <script>
+    function runCode() {
+      const html = document.getElementById('html-editor').value;
+      const css  = document.getElementById('css-editor').value;
+      const js   = document.getElementById('js-editor').value;
+      const consoleDiv = document.getElementById('console-output');
+
+      consoleDiv.innerHTML = '';
+
+      const interceptConsole = `
+        const _log = console.log;
+        const _err = console.error;
+        const _warn = console.warn;
+        function postMsg(type, args) {
+          window.parent.postMessage({ type, text: args.map(a => {
+            try { return typeof a === 'object' ? JSON.stringify(a, null, 2) : String(a); }
+            catch(e) { return String(a); }
+          }).join(' ') }, '*');
+        }
+        console.log  = (...a) => { postMsg('log', a);  _log(...a); };
+        console.error = (...a) => { postMsg('error', a); _err(...a); };
+        console.warn  = (...a) => { postMsg('warn', a);  _warn(...a); };
+        window.onerror = (msg, src, line) => { postMsg('error', ['Error: ' + msg + ' (line ' + line + ')']); };
+      `;
+
+      const content = `<!DOCTYPE html><html><head><style>${css}</style></head><body>${html}<script>${interceptConsole}\n${js}<\/script></body></html>`;
+      const iframe = document.getElementById('preview');
+      iframe.srcdoc = content;
+    }
+
+    window.addEventListener('message', (e) => {
+      const div = document.getElementById('console-output');
+      const line = document.createElement('div');
+      line.className = e.data.type;
+      line.textContent = '> ' + e.data.text;
+      div.appendChild(line);
+      div.scrollTop = div.scrollHeight;
+    });
+
+    // Auto-run on load
+    window.addEventListener('load', runCode);
+
+    // Ctrl+Enter to run
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') runCode();
+    });
+  </script>
+
+</body>
+</html>

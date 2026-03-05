@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Odin Project — Dev Hub</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #0f0f0f;
+      color: #e0e0e0;
+      min-height: 100vh;
+      padding: 2rem;
+    }
+
+    header {
+      max-width: 900px;
+      margin: 0 auto 2.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    header .logo { font-size: 2rem; }
+
+    header h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    header p {
+      font-size: 0.9rem;
+      color: #888;
+      margin-top: 0.2rem;
+    }
+
+    .grid {
+      max-width: 900px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.2rem;
+    }
+
+    .card {
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 12px;
+      padding: 1.4rem;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.2s, transform 0.15s;
+      display: block;
+    }
+
+    .card:hover {
+      border-color: #e85d0b;
+      transform: translateY(-2px);
+    }
+
+    .card .icon {
+      font-size: 1.6rem;
+      margin-bottom: 0.7rem;
+    }
+
+    .card h2 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 0.3rem;
+    }
+
+    .card p {
+      font-size: 0.82rem;
+      color: #777;
+      line-height: 1.5;
+    }
+
+    .card .tag {
+      display: inline-block;
+      margin-top: 0.8rem;
+      font-size: 0.72rem;
+      background: #252525;
+      color: #aaa;
+      padding: 0.2rem 0.55rem;
+      border-radius: 4px;
+    }
+
+    .section-label {
+      max-width: 900px;
+      margin: 2rem auto 0.8rem;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">⚔️</div>
+    <div>
+      <h1>Odin Project — Dev Hub</h1>
+      <p>Your local testing &amp; project workspace</p>
+    </div>
+  </header>
+
+  <!-- ── Quick Access ── -->
+  <p class="section-label">Quick access</p>
+  <div class="grid">
+    <a class="card" href="playground/index.html">
+      <div class="icon">🛝</div>
+      <h2>Playground</h2>
+      <p>Scratch space for quick experiments — HTML, CSS &amp; JS all wired up.</p>
+      <span class="tag">playground/index.html</span>
+    </a>
+    <a class="card" href="template/index.html">
+      <div class="icon">📄</div>
+      <h2>Starter Template</h2>
+      <p>Blank project template. Duplicate this folder when starting a new assignment.</p>
+      <span class="tag">template/index.html</span>
+    </a>
+    <a class="card" href="DOM_Testing/index.html">
+      <div class="icon">🧪</div>
+      <h2>DOM Testing</h2>
+      <p>Your existing DOM testing setup.</p>
+      <span class="tag">DOM_Testing/index.html</span>
+    </a>
+  </div>
+
+  <!-- ── Odin Assignments ── -->
+  <p class="section-label">Odin Assignments</p>
+  <div class="grid">
+
+    <a class="card" href="../odin-recipes/index.html">
+      <div class="icon">🍲</div>
+      <h2>Odin Recipes</h2>
+      <p>Foundations project — building a recipe site with basic HTML &amp; CSS.</p>
+      <span class="tag">odin-recipes</span>
+    </a>
+
+    <a class="card" href="../html-boilerplate/index.html">
+      <div class="icon">🧱</div>
+      <h2>HTML Boilerplate</h2>
+      <p>Foundations exercise — basic HTML document structure.</p>
+      <span class="tag">html-boilerplate</span>
+    </a>
+
+    <a class="card" href="../odin-links-and-images/index.html">
+      <div class="icon">🔗</div>
+      <h2>Links &amp; Images</h2>
+      <p>Foundations exercise — working with anchors, relative paths, and images.</p>
+      <span class="tag">odin-links-and-images</span>
+    </a>
+
+    <a class="card" href="../landing-page/index.html">
+      <div class="icon">🖥️</div>
+      <h2>Landing Page</h2>
+      <p>Foundations project — flexbox-based landing page layout.</p>
+      <span class="tag">landing-page</span>
+    </a>
+
+    <a class="card" href="../css-exercises/foundations/">
+      <div class="icon">🎨</div>
+      <h2>CSS Exercises</h2>
+      <p>Foundations &amp; intermediate CSS practice exercises.</p>
+      <span class="tag">css-exercises</span>
+    </a>
+
+    <a class="card" href="../Etch-a-sketch/index.html">
+      <div class="icon">✏️</div>
+      <h2>Etch-a-Sketch</h2>
+      <p>JavaScript project — dynamic grid drawing with DOM manipulation.</p>
+      <span class="tag">Etch-a-sketch</span>
+    </a>
+
+    <a class="card" href="../rock-paper-scissors/index.html">
+      <div class="icon">✊</div>
+      <h2>Rock Paper Scissors</h2>
+      <p>JavaScript project — game logic and UI.</p>
+      <span class="tag">rock-paper-scissors</span>
+    </a>
+
+    <a class="card" href="../calculator/index.html">
+      <div class="icon">🔢</div>
+      <h2>Calculator</h2>
+      <p>JavaScript project — fully functional calculator with DOM events.</p>
+      <span class="tag">calculator</span>
+    </a>
+
+  </div>
+
+  <!-- ── Other Projects ── -->
+  <p class="section-label">Other Projects</p>
+  <div class="grid">
+
+    <a class="card" href="../AICalculator/index.html">
+      <div class="icon">🤖</div>
+      <h2>AI Calculator</h2>
+      <p>Calculator variant with AI features.</p>
+      <span class="tag">AICalculator</span>
+    </a>
+
+    <a class="card" href="../CascadeProjects/taurus-career-guide/">
+      <div class="icon">🗂️</div>
+      <h2>Taurus Career Guide</h2>
+      <p>Career guide project from CascadeProjects.</p>
+      <span class="tag">CascadeProjects</span>
+    </a>
+
+  </div>
+
+  <!-- ── Resources ── -->
+  <p class="section-label">Resources</p>
+  <div class="grid">
+    <a class="card" href="https://www.theodinproject.com" target="_blank">
+      <div class="icon">🔗</div>
+      <h2>The Odin Project</h2>
+      <p>Open the official curriculum.</p>
+      <span class="tag">external</span>
+    </a>
+    <a class="card" href="https://developer.mozilla.org" target="_blank">
+      <div class="icon">📚</div>
+      <h2>MDN Web Docs</h2>
+      <p>The go-to reference for HTML, CSS, and JavaScript.</p>
+      <span class="tag">external</span>
+    </a>
+    <a class="card" href="https://javascript.info" target="_blank">
+      <div class="icon">📖</div>
+      <h2>JavaScript.info</h2>
+      <p>Modern JavaScript tutorial — great companion to Odin.</p>
+      <span class="tag">external</span>
+    </a>
+  </div>
+
+</body>
+</html>

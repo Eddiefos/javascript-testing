@@ -1,0 +1,33 @@
+/* ============================================
+   Project Name — Styles
+   ============================================ */
+
+/* --- Reset --- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* --- Base --- */
+body {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #222;
+  background: #fff;
+  padding: 2rem;
+}
+
+h1, h2, h3 {
+  line-height: 1.2;
+  margin-bottom: 0.5rem;
+}
+
+/* --- Layout --- */
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* --- Add your styles below --- */
