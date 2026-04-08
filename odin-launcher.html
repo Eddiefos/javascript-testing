@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Odin Launcher</title>
+<style>
+  :root {
+    --bg:      #0f1117;
+    --surface: #1a1d27;
+    --border:  #2a2d3a;
+    --odin:    #d35f2e;
+    --green:   #34d399;
+    --muted:   #6b7280;
+    --text:    #e2e8f0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+    gap: 24px;
+  }
+
+  h1 {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    color: var(--odin);
+    text-transform: uppercase;
+  }
+
+  /* ── Current lesson card ── */
+  .lesson-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--odin);
+    border-radius: 14px;
+    padding: 24px 28px;
+    width: 100%;
+    max-width: 580px;
+  }
+  .lesson-label {
+    font-size: 10px;
+    letter-spacing: .12em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .lesson-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .lesson-path {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 18px;
+  }
+  .lesson-link {
+    display: inline-block;
+    background: var(--odin);
+    color: white;
+    text-decoration: none;
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    transition: opacity .2s;
+  }
+  .lesson-link:hover { opacity: .85; }
+
+  .edit-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+  }
+  .edit-row input {
+    flex: 1;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    padding: 8px 12px;
+    font-size: 13px;
+    outline: none;
+  }
+  .edit-row input:focus { border-color: var(--odin); }
+  .edit-row button {
+    background: var(--border);
+    color: var(--text);
+    border: none;
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background .2s;
+  }
+  .edit-row button:hover { background: #3a3d4a; }
+
+  /* ── Timer ── */
+  .timer-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px;
+    width: 100%;
+    max-width: 580px;
+    text-align: center;
+  }
+  #timerDisplay {
+    font-size: 64px;
+    font-weight: 700;
+    letter-spacing: -.02em;
+    font-variant-numeric: tabular-nums;
+    color: var(--text);
+    margin-bottom: 20px;
+    transition: color .3s;
+  }
+  #timerDisplay.running { color: var(--green); }
+  #timerDisplay.done    { color: var(--odin); }
+
+  .timer-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 16px;
+  }
+  .btn {
+    padding: 10px 24px;
+    border-radius: 8px;
+    border: none;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity .2s;
+  }
+  .btn:hover { opacity: .85; }
+  .btn-start  { background: var(--green);  color: #0f1117; }
+  .btn-reset  { background: var(--border); color: var(--text); }
+
+  .duration-row {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+  }
+  .dur-btn {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    border-radius: 6px;
+    padding: 4px 12px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .dur-btn:hover, .dur-btn.active { border-color: var(--odin); color: var(--odin); }
+
+  /* ── Log box (shown when timer ends) ── */
+  .log-box {
+    background: var(--surface);
+    border: 1px solid var(--odin);
+    border-radius: 14px;
+    padding: 24px 28px;
+    width: 100%;
+    max-width: 580px;
+    display: none;
+  }
+  .log-box h3 { font-size: 14px; margin-bottom: 12px; }
+  .log-box textarea {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    padding: 10px 12px;
+    font-size: 13px;
+    font-family: inherit;
+    resize: none;
+    height: 64px;
+    outline: none;
+  }
+  .log-box textarea:focus { border-color: var(--odin); }
+  .log-box button {
+    margin-top: 10px;
+    background: var(--odin);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  /* ── Stats ── */
+  .stats-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 28px;
+    width: 100%;
+    max-width: 580px;
+    display: flex;
+    gap: 0;
+  }
+  .stat { flex: 1; text-align: center; }
+  .stat + .stat { border-left: 1px solid var(--border); }
+  .stat-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--green);
+  }
+  .stat-label {
+    font-size: 10px;
+    letter-spacing: .1em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  /* ── Session log ── */
+  .history-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 28px;
+    width: 100%;
+    max-width: 580px;
+  }
+  .history-title {
+    font-size: 10px;
+    letter-spacing: .12em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .history-item {
+    display: flex;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    align-items: baseline;
+  }
+  .history-item:last-child { border-bottom: none; }
+  .history-date { color: var(--muted); font-size: 11px; white-space: nowrap; }
+  .history-text { color: #94a3b8; }
+  .no-history   { color: var(--muted); font-size: 13px; }
+
+  .back-link {
+    align-self: flex-start;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 12px;
+    margin-bottom: -12px;
+  }
+  .back-link:hover { color: var(--text); }
+</style>
+</head>
+<body>
+
+<a class="back-link" href="index.html">← Back to Dev Hub</a>
+<h1>The Odin Project</h1>
+
+<!-- ── Current lesson ── -->
+<div class="lesson-card">
+  <div class="lesson-label">Current lesson</div>
+  <div class="lesson-title" id="lessonTitle">Object Constructors</div>
+  <div class="lesson-path" id="lessonPath">Full Stack JavaScript › JavaScript</div>
+  <a id="lessonLink" href="https://www.theodinproject.com/lessons/node-path-javascript-object-constructors" target="_blank" class="lesson-link">Open lesson →</a>
+  <div class="edit-row">
+    <input type="text" id="lessonInput" placeholder="Paste new lesson URL to update…">
+    <button onclick="updateLesson()">Update</button>
+  </div>
+</div>
+
+<!-- ── Timer ── -->
+<div class="timer-card">
+  <div id="timerDisplay">25:00</div>
+  <div class="timer-buttons">
+    <button class="btn btn-start" id="startBtn" onclick="startTimer()">Start session</button>
+    <button class="btn btn-reset" onclick="resetTimer()">Reset</button>
+  </div>
+  <div class="duration-row">
+    <button class="dur-btn active" onclick="setDuration(25, this)">25 min</button>
+    <button class="dur-btn"       onclick="setDuration(45, this)">45 min</button>
+    <button class="dur-btn"       onclick="setDuration(60, this)">60 min</button>
+  </div>
+</div>
+
+<!-- ── Log prompt (shown after timer) ── -->
+<div class="log-box" id="logBox">
+  <h3>Session done — what did you work on?</h3>
+  <textarea id="logInput" placeholder="One sentence is enough…"></textarea>
+  <button onclick="saveLog()">Save & close</button>
+</div>
+
+<!-- ── Stats ── -->
+<div class="stats-card">
+  <div class="stat">
+    <div class="stat-value" id="statSessions">0</div>
+    <div class="stat-label">Sessions</div>
+  </div>
+  <div class="stat">
+    <div class="stat-value" id="statStreak">0</div>
+    <div class="stat-label">Day streak</div>
+  </div>
+  <div class="stat">
+    <div class="stat-value" id="statMinutes">0</div>
+    <div class="stat-label">Total minutes</div>
+  </div>
+</div>
+
+<!-- ── History ── -->
+<div class="history-card">
+  <div class="history-title">Session log</div>
+  <div id="historyList"><div class="no-history">No sessions yet — start your first one above.</div></div>
+</div>
+
+<script>
+let duration  = 25;
+let remaining = duration * 60;
+let interval  = null;
+let running   = false;
+
+const SLUG_RE = /lessons\/([^/?#]+)/;
+
+function slugToTitle(slug) {
+  return slug
+    .replace(/^node-path-javascript-/, '')
+    .replace(/^node-path-/, '')
+    .replace(/-/g, ' ')
+    .replace(/\b\w/g, c => c.toUpperCase());
+}
+
+function updateLesson() {
+  const val = document.getElementById('lessonInput').value.trim();
+  if (!val) return;
+  const m = val.match(SLUG_RE);
+  const slug = m ? m[1] : null;
+  if (!slug) { alert('Paste a full Odin Project lesson URL'); return; }
+  const title = slugToTitle(slug);
+  document.getElementById('lessonTitle').textContent = title;
+  document.getElementById('lessonLink').href = val;
+  document.getElementById('lessonInput').value = '';
+  const data = load();
+  data.lesson = { title, url: val };
+  save(data);
+}
+
+function fmt(s) {
+  const m = Math.floor(s / 60);
+  const sec = s % 60;
+  return String(m).padStart(2,'0') + ':' + String(sec).padStart(2,'0');
+}
+
+function setDuration(mins, btn) {
+  if (running) return;
+  duration  = mins;
+  remaining = mins * 60;
+  document.getElementById('timerDisplay').textContent = fmt(remaining);
+  document.querySelectorAll('.dur-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function startTimer() {
+  if (running) {
+    clearInterval(interval);
+    running = false;
+    document.getElementById('startBtn').textContent = 'Resume';
+    document.getElementById('timerDisplay').classList.remove('running');
+    return;
+  }
+  running = true;
+  document.getElementById('startBtn').textContent = 'Pause';
+  document.getElementById('timerDisplay').classList.add('running');
+  document.getElementById('timerDisplay').classList.remove('done');
+
+  interval = setInterval(() => {
+    remaining--;
+    document.getElementById('timerDisplay').textContent = fmt(remaining);
+    if (remaining <= 0) {
+      clearInterval(interval);
+      running = false;
+      timerDone();
+    }
+  }, 1000);
+}
+
+function resetTimer() {
+  clearInterval(interval);
+  running = false;
+  remaining = duration * 60;
+  document.getElementById('timerDisplay').textContent = fmt(remaining);
+  document.getElementById('timerDisplay').classList.remove('running','done');
+  document.getElementById('startBtn').textContent = 'Start session';
+  document.getElementById('logBox').style.display = 'none';
+}
+
+function timerDone() {
+  document.getElementById('timerDisplay').classList.remove('running');
+  document.getElementById('timerDisplay').classList.add('done');
+  document.getElementById('timerDisplay').textContent = 'Done!';
+  document.getElementById('startBtn').textContent = 'Start session';
+  document.getElementById('logBox').style.display = 'block';
+  document.getElementById('logInput').focus();
+  recordSession('');
+}
+
+function saveLog() {
+  const text = document.getElementById('logInput').value.trim();
+  if (text) {
+    const data = load();
+    if (data.sessions.length > 0) {
+      data.sessions[data.sessions.length - 1].note = text;
+      save(data);
+    }
+  }
+  document.getElementById('logInput').value = '';
+  document.getElementById('logBox').style.display = 'none';
+  renderAll();
+}
+
+function recordSession(note) {
+  const data = load();
+  data.sessions.push({
+    date:    new Date().toISOString(),
+    minutes: duration,
+    lesson:  document.getElementById('lessonTitle').textContent,
+    note:    note,
+  });
+  save(data);
+  renderAll();
+}
+
+function load() {
+  try { return JSON.parse(localStorage.getItem('odin') || '{}'); }
+  catch { return {}; }
+}
+function save(d) { localStorage.setItem('odin', JSON.stringify(d)); }
+
+function renderAll() {
+  const data     = load();
+  const sessions = data.sessions || [];
+
+  if (data.lesson) {
+    document.getElementById('lessonTitle').textContent = data.lesson.title;
+    document.getElementById('lessonLink').href         = data.lesson.url;
+  }
+
+  const totalMins = sessions.reduce((a, s) => a + (s.minutes || 0), 0);
+  document.getElementById('statSessions').textContent = sessions.length;
+  document.getElementById('statMinutes').textContent  = totalMins;
+
+  const days = [...new Set(sessions.map(s => s.date.slice(0,10)))].sort();
+  let streak = 0;
+  if (days.length) {
+    let check = new Date().toISOString().slice(0,10);
+    for (let i = days.length - 1; i >= 0; i--) {
+      if (days[i] === check) {
+        streak++;
+        const d = new Date(check);
+        d.setDate(d.getDate() - 1);
+        check = d.toISOString().slice(0,10);
+      } else if (days[i] < check) break;
+    }
+  }
+  document.getElementById('statStreak').textContent = streak;
+
+  const el = document.getElementById('historyList');
+  if (!sessions.length) {
+    el.innerHTML = '<div class="no-history">No sessions yet — start your first one above.</div>';
+    return;
+  }
+  el.innerHTML = [...sessions].reverse().slice(0, 20).map(s => {
+    const d = new Date(s.date);
+    const dateStr = d.toLocaleDateString('en', {weekday:'short', month:'short', day:'numeric'})
+                  + ' ' + d.toLocaleTimeString('en', {hour:'2-digit', minute:'2-digit'});
+    return `<div class="history-item">
+      <span class="history-date">${dateStr} · ${s.minutes}min</span>
+      <span class="history-text">${s.note || s.lesson || '—'}</span>
+    </div>`;
+  }).join('');
+}
+
+renderAll();
+</script>
+</body>
+</html>
