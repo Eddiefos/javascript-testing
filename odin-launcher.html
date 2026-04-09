@@ -328,6 +328,7 @@ let duration  = 25;
 let remaining = duration * 60;
 let interval  = null;
 let running   = false;
+let endTime   = null;  // absolute timestamp when timer will hit zero
 
 const SLUG_RE = /lessons\/([^/?#]+)/;
 
@@ -371,26 +372,31 @@ function setDuration(mins, btn) {
 
 function startTimer() {
   if (running) {
+    // Pause: save how much time is actually left
     clearInterval(interval);
     running = false;
+    remaining = Math.max(0, Math.round((endTime - Date.now()) / 1000));
     document.getElementById('startBtn').textContent = 'Resume';
     document.getElementById('timerDisplay').classList.remove('running');
     return;
   }
   running = true;
+  // Record the absolute moment the timer should reach zero
+  endTime = Date.now() + remaining * 1000;
   document.getElementById('startBtn').textContent = 'Pause';
   document.getElementById('timerDisplay').classList.add('running');
   document.getElementById('timerDisplay').classList.remove('done');
 
   interval = setInterval(() => {
-    remaining--;
-    document.getElementById('timerDisplay').textContent = fmt(remaining);
-    if (remaining <= 0) {
+    // Always calculate from wall-clock time — immune to tab throttling
+    const left = Math.max(0, Math.round((endTime - Date.now()) / 1000));
+    document.getElementById('timerDisplay').textContent = fmt(left);
+    if (left <= 0) {
       clearInterval(interval);
       running = false;
       timerDone();
     }
-  }, 1000);
+  }, 500); // poll twice per second so the display updates snappily
 }
 
 function resetTimer() {
