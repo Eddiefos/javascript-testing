@@ -421,12 +421,11 @@ function timerDone() {
 
 function saveLog() {
   const text = document.getElementById('logInput').value.trim();
-  if (text) {
-    const data = load();
-    if (data.sessions.length > 0) {
-      data.sessions[data.sessions.length - 1].note = text;
-      save(data);
-    }
+  const data = load();
+  if (!data.sessions) data.sessions = [];
+  if (text && data.sessions.length > 0) {
+    data.sessions[data.sessions.length - 1].note = text;
+    save(data);
   }
   document.getElementById('logInput').value = '';
   document.getElementById('logBox').style.display = 'none';
@@ -435,6 +434,7 @@ function saveLog() {
 
 function recordSession(note) {
   const data = load();
+  if (!data.sessions) data.sessions = [];
   data.sessions.push({
     date:    new Date().toISOString(),
     minutes: duration,
